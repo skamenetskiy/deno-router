@@ -2,8 +2,8 @@ import {
   type Handler as RouterHandler,
   type Route,
   route,
-} from "jsr:@std/http/unstable-route";
-import { ConsoleLogger, Log, Severity } from "jsr:@cross/log";
+} from "jsr:@std/http@^1.0.20/unstable-route";
+import { ConsoleLogger, Log, Severity } from "jsr:@cross/log@^0.10.5";
 
 export interface Router {
   get: handlerFunc;
@@ -62,7 +62,7 @@ switch (logLevel) {
     break;
 }
 
-export const log = new Log([
+export const log: Log = new Log([
   new ConsoleLogger({
     minimumSeverity: severity,
   }),
