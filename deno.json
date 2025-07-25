@@ -1,0 +1,13 @@
+{
+  "name": "@skamenetskiy/router",
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": "./mod.ts",
+  "tasks": {
+    "dev": "deno test --watch"
+  },
+  "imports": {
+    "@cross/log": "jsr:@cross/log@^0.10.5",
+    "@std/http": "jsr:@std/http@^1.0.20"
+  }
+}
