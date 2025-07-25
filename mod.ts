@@ -5,6 +5,11 @@ import {
 } from "jsr:@std/http@^1.0.20/unstable-route";
 import { ConsoleLogger, Log, Severity } from "jsr:@cross/log@^0.10.5";
 
+/**
+ * @interface Router
+ * @description Describes the router object (returned from router()).
+ * @exports
+ */
 export interface Router {
   get: handlerFunc;
   post: handlerFunc;
@@ -18,6 +23,19 @@ export interface Router {
   listen(): Listener;
 }
 
+/**
+ * @interface Context
+ * @description Describes handler context.
+ * @property {Request} request is passed in as is from original Deno handler.
+ * @property {URLPatternResult} params is the original result of Deno http route.
+ * @property {Deno.ServeHandlerInfo} info is the original request info from Deno handler.
+ * @property {UserData} userData is a key-value storage that is passed from middlewares to handler.
+ * @property {Log} log is a shortcut to Log.
+ * @method {responseFunc} json is a helper function to generate json Response.
+ * @method {responseFunc} text is a helper function to generate text Response.
+ * @method {responseFunc} html is a helper function to generate text Response.
+ * @exports
+ */
 export interface Context {
   request: Request;
   params?: URLPatternResult;
@@ -29,20 +47,49 @@ export interface Context {
   html: responseFunc<string>;
 }
 
+/**
+ * @interface UserData
+ * @description Key-value storage.
+ * @method set is for setting data.
+ * @method get is for getting data.
+ * @method del is for deleting data.
+ * @exports
+ */
 export interface UserData {
   set<T = unknown>(key: string, value: T): void;
   get<T = unknown>(key: string): T | undefined;
   del(key: string): boolean;
 }
 
+/**
+ * @type Listener
+ * @description A shortcut to Deno.HttpServer<Deno.NetAddr>.
+ * @exports
+ */
 export type Listener = Deno.HttpServer<Deno.NetAddr>;
+
+/**
+ * @type Handler
+ * @description Describes the request handler function.
+ * @exports
+ */
 export type Handler = (ctx: Context) => Response | Promise<Response>;
 
+/**
+ * @type ErrorHandler
+ * @description Describes the error handler function.
+ * @exports
+ */
 export type ErrorHandler = (
   ctx: Context,
   err: Error,
 ) => Response | Promise<Response>;
 
+/**
+ * @type Middleware
+ * @description Describes the middleware function.
+ * @exports
+ */
 export type Middleware = (
   ctx: Context,
 ) => Promise<void>;
@@ -62,6 +109,11 @@ switch (logLevel) {
     break;
 }
 
+/**
+ * @const log
+ * @description Configured logging instance.
+ * @exports
+ */
 export const log: Log = new Log([
   new ConsoleLogger({
     minimumSeverity: severity,
@@ -82,6 +134,11 @@ type denoHandler = (
   info?: Deno.ServeHandlerInfo,
 ) => Promise<Response>;
 
+/**
+ * @function router
+ * @description Returns a new router (app).
+ * @exports
+ */
 export function router(): Router {
   const routes: Route[] = [];
   const globalMiddlewares: Middleware[] = [];
