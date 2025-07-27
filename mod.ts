@@ -42,9 +42,9 @@ export interface Context {
   info?: Deno.ServeHandlerInfo;
   userData: UserData;
   log: Log;
-  json: responseFunc;
-  text: responseFunc<string>;
-  html: responseFunc<string>;
+  json: <T = unknown>(statusCode: number, body: T) => Response;
+  text: (statusCode: number, body: string) => Response;
+  html: (statusCode: number, body: string) => Response;
 }
 
 /**
@@ -121,7 +121,6 @@ export const log: Log = new Log([
 ]);
 
 type useFunc = (...middlewares: Middleware[]) => void;
-type responseFunc<T = unknown> = (statusCode: number, body: T) => Response;
 
 type handlerFunc = (
   pattern: string,
